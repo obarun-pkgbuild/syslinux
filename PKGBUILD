@@ -8,7 +8,7 @@
 pkgname=syslinux
 pkgver=6.03
 _tag=syslinux-$pkgver
-pkgrel=9
+pkgrel=10
 pkgdesc='Collection of boot loaders that boot from FAT, ext2/3/4 and btrfs filesystems, from CDs and via PXE'
 url='http://www.syslinux.org/'
 arch=(x86_64)
@@ -46,7 +46,7 @@ source=(git://git.kernel.org/pub/scm/boot/syslinux/syslinux.git#tag=$_tag
 		fix_infinite_loop_tests.patch
 )
 sha1sums=('SKIP'
-          '69bb307551c3429ab515258919e89f0012147720'
+          '223e1943eb922ecdda338b7faa991f3a7948168a'
           '2081d774731498f6bd598505a2a8c5d3b260cb00'
           '86320f7a18a8dbc913a2bfcb08b09ecd33f7ed30'
           '702d91839eeb29388552d2310ddccb5e046994a8'
