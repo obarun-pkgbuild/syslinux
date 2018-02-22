@@ -34,5 +34,5 @@ index ac73729..fc7f04f 100644
      /* Real mode code */
      if (syslinux_memmap_find(amap, &real_mode_base,
 -- 
-2.7.4.GIT
+2.10.5.GIT
 

@@ -77,5 +77,5 @@ index 1057112..bf815c4 100644
  	__bss_lma = .;		/* Dummy */
  	.bss (NOLOAD) : AT (__bss_lma) {
 -- 
-2.7.4.GIT
+2.10.5.GIT
 

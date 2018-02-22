@@ -8,7 +8,7 @@
 pkgname=syslinux
 pkgver=6.03
 _tag=syslinux-$pkgver
-pkgrel=10
+pkgrel=11
 pkgdesc='Collection of boot loaders that boot from FAT, ext2/3/4 and btrfs filesystems, from CDs and via PXE'
 url='http://www.syslinux.org/'
 arch=(x86_64)
@@ -34,14 +34,12 @@ source=(git://git.kernel.org/pub/scm/boot/syslinux/syslinux.git#tag=$_tag
         syslinux.cfg
         syslinux-install_update
         splash.png
-        asm-constraints.patch
         btrfs-fix.patch::http://repo.or.cz/syslinux.git/patch/548386049cd41e887079cdb904d3954365eb28f3?hp=721a0af2f0ba111c31685c5f6c5481eb25346971
         gcc-fix-alignment.patch::http://repo.or.cz/syslinux.git/patch/e5f2b577ded109291c9632dacb6eaa621d8a59fe?hp=8dc6d758b564a1ccc44c3ae11f265d43628219ce
         dont-guess-alignment.patch::http://repo.or.cz/syslinux.git/patch/0cc9a99e560a2f52bcf052fd85b1efae35ee812f?hp=e5f2b577ded109291c9632dacb6eaa621d8a59fe
         kdb-230.patch::http://repo.or.cz/syslinux.git/patch/138e850fab106b5235178848b3e0d33e25f4d3a2
         correct_base_type.patch::http://repo.or.cz/syslinux.git/patch/83aad4f
         set_mode_base.patch::http://repo.or.cz/syslinux.git/patch/0a2dbb3
-		fix-ldlinux-elf-not-enough-room-for-program-headers.patch
 		fix_return_pointer.patch::http://repo.or.cz/syslinux.git/patch/8dc6d758b564a1ccc44c3ae11f265d43628219ce
 		fix_infinite_loop_tests.patch
 )
@@ -49,14 +47,12 @@ sha1sums=('SKIP'
           '223e1943eb922ecdda338b7faa991f3a7948168a'
           '2081d774731498f6bd598505a2a8c5d3b260cb00'
           '86320f7a18a8dbc913a2bfcb08b09ecd33f7ed30'
-          '702d91839eeb29388552d2310ddccb5e046994a8'
-          '3e7d6e399c25fb7f5d31cc8e580d01163695e351'
-          '74b976dd3ce28a619c2e9ef69a33fd455dc4bd4c'
-          'b6ef5a7cdd4b7c714fd78c174e93ae6e854ae1ee'
-          '370b4bd392361d3fbc4a10f057d69c737acabd8a'
-          '6fdd0ebd6c34e4a424982e29beacff0a16e50c02'
-          'd3551c17674ea51f3457a05ec1136604349fb89e'
-          '5f5add52a32424203d7df8b5809f761654cc9cd0'
+          '6ebf77bf028c928a6ef33dadeee7402b3113b6d3'
+          'eaa9f5cd82b501f076ece4812d2d37f49d02caae'
+          'c6a6e96e233b2f8105503725cd614abc1bac2845'
+          'f50e0a92c65536ef73a84614d489e52d9d1db329'
+          'e24bf5b1617bab4a3f46925c5a8ee6079f4686bf'
+          '500c174fce91133d40024b28f6f5cedb144b84c2'
           'b3d2196aaec154749c5b796c6d9bfd605a918cf8'
           '7ecb02550666dfafeb0b22a67dcc34caa4b79767')
 validpgpkeys=('6DD4217456569BA711566AC7F06E8FDE7B45DAAC') # Eric Vidal
@@ -65,8 +61,7 @@ _targets='bios efi32 efi64'
 
 prepare() {
   cd syslinux
-  export LDFLAGS+=--no-dynamic-linker  # workaround for binutils 2.28 http://www.syslinux.org/wiki/index.php?title=Building
-  export EXTRA_CFLAGS=-fno-PIE   # to fix gpxe build
+
   # FS#48253
   patch -p1 < ../gcc-fix-alignment.patch
   patch -p1 < ../dont-guess-alignment.patch
@@ -81,9 +76,6 @@ prepare() {
   patch -p1 < ../correct_base_type.patch
   patch -p1 < ../set_mode_base.patch
   
-  #fix ldlinux
-  patch -p1 < ../fix-ldlinux-elf-not-enough-room-for-program-headers.patch
-  
   # FS#49250
   patch -p1 < ../fix_return_pointer.patch
 
@@ -96,12 +88,12 @@ prepare() {
   # disable debug and development flags to reduce bootloader size
   truncate --size 0 mk/devel.mk
   
-  # asm contraints
-  patch -p1 < ../asm-constraints.patch
 }
 
 build() {
   cd syslinux
+  export LDFLAGS+=--no-dynamic-linker  # workaround for binutils 2.28 http://www.syslinux.org/wiki/index.php?title=Building
+  export EXTRA_CFLAGS=-fno-PIE   # to fix gpxe build
   make PYTHON=python2 $_targets
 }
 
