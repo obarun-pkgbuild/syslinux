@@ -8,7 +8,7 @@
 pkgname=syslinux
 pkgver=6.03
 _tag=syslinux-$pkgver
-pkgrel=11
+pkgrel=12
 pkgdesc='Collection of boot loaders that boot from FAT, ext2/3/4 and btrfs filesystems, from CDs and via PXE'
 url='http://www.syslinux.org/'
 arch=(x86_64)
@@ -41,11 +41,12 @@ source=(git://git.kernel.org/pub/scm/boot/syslinux/syslinux.git#tag=$_tag
         correct_base_type.patch::http://repo.or.cz/syslinux.git/patch/83aad4f
         set_mode_base.patch::http://repo.or.cz/syslinux.git/patch/0a2dbb3
 		fix_return_pointer.patch::http://repo.or.cz/syslinux.git/patch/8dc6d758b564a1ccc44c3ae11f265d43628219ce
+		support-ext4-64bit.patch::http://repo.or.cz/syslinux.git/patch/af7e95c32cea40c1e443ae301e64b27f068b4915
 		fix_infinite_loop_tests.patch
 )
 sha1sums=('SKIP'
           '223e1943eb922ecdda338b7faa991f3a7948168a'
-          '2081d774731498f6bd598505a2a8c5d3b260cb00'
+          'd630bb204b8515164ee435afee52bc6b4d2fbd89'
           '86320f7a18a8dbc913a2bfcb08b09ecd33f7ed30'
           '6ebf77bf028c928a6ef33dadeee7402b3113b6d3'
           'eaa9f5cd82b501f076ece4812d2d37f49d02caae'
@@ -54,6 +55,7 @@ sha1sums=('SKIP'
           'e24bf5b1617bab4a3f46925c5a8ee6079f4686bf'
           '500c174fce91133d40024b28f6f5cedb144b84c2'
           'b3d2196aaec154749c5b796c6d9bfd605a918cf8'
+          'fe3ab41235aa57259bb6af8cc30c5877c1d8fb57'
           '7ecb02550666dfafeb0b22a67dcc34caa4b79767')
 validpgpkeys=('6DD4217456569BA711566AC7F06E8FDE7B45DAAC') # Eric Vidal
 
@@ -81,6 +83,9 @@ prepare() {
 
   # fix infinite loop in load_linux
   patch -p1 < ../fix_infinite_loop_tests.patch
+  
+  # FS#58137
+  patch -p1 < ../support-ext4-64bit.patch
 
   # do not swallow efi compilation output to make debugging easier
   sed 's|> /dev/null 2>&1||' -i efi/check-gnu-efi.sh
